@@ -113,3 +113,29 @@ Contributions are welcome! Feel free to:
 3. Commit your changes (`git commit -m "Add amazing feature"`)
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
+
+## Roadmap
+
+- [ ] Direct file attachment sharing
+- [ ] Share via specific app (`--via com.whatsapp`)
+- [ ] Config file support (`~/.config/termux-share.conf`)
+- [ ] History of shared items
+- [ ] Add to official Termux packages
+
+## License
+
+MIT License - see [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- [Termux](https://termux.dev) - The terminal emulator that makes this possible
+- Android's `am` (Activity Manager) command
+
+## Support
+
+If you find this tool useful, please consider starring the repo ⭐ and sharing it with the Termux community!
+
+
+---
+
+**Made with ❤️ for the Termux community**
