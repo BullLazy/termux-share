@@ -100,4 +100,4 @@ termux-share -i
 
 `Termux` (obviously)
 `termux-api` (only for --clipboard features)
-`pkg install termux-api`
+opkg install termux-api
