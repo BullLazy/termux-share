@@ -1,0 +1,186 @@
+#!/data/data/com.termux/files/usr/bin/bash
+
+#========================================================
+# termux-share v2.1
+# Share text, URLs, clipboard, and piped content
+# from the terminal via Android's share menu.
+# License: MIT
+#========================================================
+
+VERSION="2.1"
+
+usage() {
+    echo "termux-share v$VERSION - Terminal Share Tool"
+    echo ""
+    echo "Usage:"
+    echo "  termux-share --content <text>         Share text"
+    echo "  termux-share --url <link>             Share URL"
+    echo "  termux-share --clipboard              Share clipboard content"
+    echo "  termux-share --pipe                   Share piped input"
+    echo "  termux-share --file-content <file>    Share file content as text"
+    echo "  termux-share --quick <note>           Quick one-liner share"
+    echo "  termux-share --interactive            Interactive menu"
+    echo ""
+    echo "Examples:"
+    echo "  termux-share --content 'Meeting at 3pm'"
+    echo "  termux-share --url https://github.com"
+    echo "  termux-share --clipboard"
+    echo "  ls -la | termux-share --pipe"
+    echo "  termux-share --file-content report.txt"
+    echo "  termux-share --quick 'Buy milk'"
+    echo "  termux-share --interactive"
+    exit 0
+}
+
+# Core share function
+do_share() {
+    local text="$1"
+    am start -a android.intent.action.SEND \
+        -t "text/plain" \
+        -e android.intent.extra.TEXT "$text" \
+        --activity-clear-top > /dev/null 2>&1
+    echo "✓ Share menu opened."
+}
+
+# No args or help
+if [ $# -eq 0 ] || [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
+    usage
+fi
+
+# Version
+if [ "$1" = "--version" ] || [ "$1" = "-v" ]; then
+    echo "termux-share v$VERSION"
+    exit 0
+fi
+
+# --- Text Share ---
+if [ "$1" = "--content" ]; then
+    shift
+    [ -z "$1" ] && { echo "Error: No text provided."; exit 1; }
+    do_share "$*"
+    exit 0
+fi
+
+# --- URL Share ---
+if [ "$1" = "--url" ]; then
+    shift
+    [ -z "$1" ] && { echo "Error: No URL provided."; exit 1; }
+    do_share "$1"
+    echo "  URL: $1"
+    exit 0
+fi
+
+# --- Clipboard Share ---
+if [ "$1" = "--clipboard" ] || [ "$1" = "-c" ]; then
+    if ! command -v termux-clipboard-get &> /dev/null; then
+        echo "Error: termux-clipboard-get not found."
+        echo "Install: pkg install termux-api"
+        exit 1
+    fi
+    CLIP=$(termux-clipboard-get 2>/dev/null)
+    if [ -z "$CLIP" ]; then
+        echo "Error: Clipboard is empty."
+        exit 1
+    fi
+    do_share "$CLIP"
+    echo "  Content: ${CLIP:0:50}..."
+    exit 0
+fi
+
+# --- Pipe Share ---
+if [ "$1" = "--pipe" ] || [ "$1" = "-p" ]; then
+    if [ -t 0 ]; then
+        echo "Error: No piped input."
+        echo "Usage: command | termux-share --pipe"
+        exit 1
+    fi
+    PIPED=$(cat)
+    if [ -z "$PIPED" ]; then
+        echo "Error: Empty piped input."
+        exit 1
+    fi
+    do_share "$PIPED"
+    echo "  Length: $(echo "$PIPED" | wc -l) lines"
+    exit 0
+fi
+
+# --- File Content Share ---
+if [ "$1" = "--file-content" ] || [ "$1" = "-f" ]; then
+    shift
+    [ -z "$1" ] && { echo "Error: No file specified."; exit 1; }
+    [[ "$1" != /* ]] && FILE="$(pwd)/$1" || FILE="$1"
+    if [ ! -f "$FILE" ]; then
+        echo "Error: File not found: $FILE"
+        exit 1
+    fi
+    do_share "$(cat "$FILE")"
+    echo "  File: $(basename "$FILE")"
+    exit 0
+fi
+
+# --- Quick Note ---
+if [ "$1" = "--quick" ] || [ "$1" = "-q" ]; then
+    shift
+    [ -z "$1" ] && { echo "Error: No note provided."; exit 1; }
+    do_share "$*"
+    exit 0
+fi
+
+# --- Interactive Menu ---
+if [ "$1" = "--interactive" ] || [ "$1" = "-i" ]; then
+    echo "╔══════════════════════════╗"
+    echo "║   termux-share Menu      ║"
+    echo "╠══════════════════════════╣"
+    echo "║ 1. Share clipboard       ║"
+    echo "║ 2. Share quick note      ║"
+    echo "║ 3. Share file content    ║"
+    echo "║ 4. Share URL             ║"
+    echo "║ 5. Exit                  ║"
+    echo "╚══════════════════════════╝"
+    echo -n "Choice (1-5): "
+    read -r CHOICE
+    
+    case $CHOICE in
+        1)
+            if command -v termux-clipboard-get &> /dev/null; then
+                CLIP=$(termux-clipboard-get 2>/dev/null)
+                [ -n "$CLIP" ] && do_share "$CLIP" || echo "Clipboard is empty."
+            else
+                echo "Install: pkg install termux-api"
+            fi
+            ;;
+        2)
+            echo -n "Note: "
+            read -r NOTE
+            [ -n "$NOTE" ] && do_share "$NOTE" || echo "Empty note."
+            ;;
+        3)
+            echo -n "File path: "
+            read -r FPATH
+            [[ "$FPATH" != /* ]] && FPATH="$(pwd)/$FPATH"
+            if [ -f "$FPATH" ]; then
+                do_share "$(cat "$FPATH")"
+                echo "  File: $(basename "$FPATH")"
+            else
+                echo "File not found: $FPATH"
+            fi
+            ;;
+        4)
+            echo -n "URL: "
+            read -r URL
+            [ -n "$URL" ] && do_share "$URL" || echo "Empty URL."
+            ;;
+        5)
+            echo "Exit."
+            ;;
+        *)
+            echo "Invalid choice."
+            ;;
+    esac
+    exit 0
+fi
+
+# Invalid argument
+echo "Error: Invalid argument: $1"
+echo "Help: termux-share --help"
+exit 1
