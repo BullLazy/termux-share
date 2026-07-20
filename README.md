@@ -65,6 +65,4 @@ termux-share --url https://termux.dev
 termux-share --clipboard
 termux-share -c
 ```
-| Requires: termux-api | package: pkg install termux-api
-
-
+| `Requires: termux-api` | `package: pkg install termux-api`
