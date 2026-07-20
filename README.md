@@ -43,3 +43,28 @@ cd termux-share
 cp termux-share ~/bin/
 chmod +x ~/bin/termux-share
 ```
+
+## Usage 
+
+### Share Text
+
+```bash
+termux-share --content "Hello from Termux!"
+termux-share --content "Meeting tomorrow at 3pm"
+```
+### Share Url
+
+```bash
+termux-share --url https://github.com
+termux-share --url https://termux.dev
+```
+
+### Share Clipboard Content
+
+```bash
+termux-share --clipboard
+termux-share -c
+```
+| Requires: termux-api | package: pkg install termux-api
+
+
