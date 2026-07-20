@@ -38,7 +38,7 @@ curl -O https://raw.githubusercontent.com/BullLazy/termux-share/main/termux-shar
 ### Git Clone
 
 ```bash
-git clone https://github.com/KULLANICI_ADIN/termux-share.git
+git clone https://github.com/BullLazy/termux-share.git
 cd termux-share
 cp termux-share ~/bin/
 chmod +x ~/bin/termux-share
