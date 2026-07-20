@@ -98,3 +98,6 @@ termux-share -i
 
 ## Dependencies 
 `Termux` (obviously)
+`termux-api` (only for --clipboard features)
+```bash
+
