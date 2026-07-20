@@ -65,4 +65,36 @@ termux-share --url https://termux.dev
 termux-share --clipboard
 termux-share -c
 ```
-| `Requires: termux-api` | `package: pkg install termux-api`
+`Requires: termux-api`, `package: pkg install termux-api`
+
+### Shared Piped Command Output
+
+```bash
+ls -la | termux-share --pipe
+cat notes.txt | termux-share --pipe
+df -h | termux-share -p
+cal | termux-share --pipe
+```
+### Share File Content as Text
+
+```bash
+termux-share --file-content report.txt
+termux-share -f ~/notes/todo.md
+```
+
+### Quick One-Liner
+
+```bash
+termux-share --quick "Don't forget the milk!"
+termux-share -q "Server reboot at midnight"
+```
+
+### İnteractive Menu
+
+```bash
+termux-share --interactive
+termux-share -i
+```
+
+## Dependencies 
+`Termux` (obviously)
