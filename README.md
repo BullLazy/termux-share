@@ -33,9 +33,13 @@
 
 ```bash
 curl -O https://raw.githubusercontent.com/BullLazy/termux-share/main/termux-share && chmod +x termux-share && mkdir -p ~/bin && mv termux-share ~/bin/ && echo 'export PATH="$HOME/bin:$PATH"' >> ~/.bashrc && source ~/.bashrc
+```
 
 ### Git Clone
-`git clone https://github.com/KULLANICI_ADIN/termux-share.git
+
+```bash
+git clone https://github.com/KULLANICI_ADIN/termux-share.git
 cd termux-share
 cp termux-share ~/bin/
-chmod +x ~/bin/termux-share`
+chmod +x ~/bin/termux-share
+```
