@@ -128,7 +128,7 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ## Acknowledgments
 
-- [Termux](https://termux.dev) - The terminal emulator that makes this possible
+- - [Termux](https://termux.dev) - The terminal emulator that makes this possible
 - Android's `am` (Activity Manager) command
 
 ## Support
