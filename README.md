@@ -97,9 +97,7 @@ termux-share -i
 ```
 
 ## Dependencies 
-```bash
-Termux (obviously)
-termux-api (only for --clipboard features)
-```
 
-
+`Termux` (obviously)
+`termux-api` (only for --clipboard features)
+# pkg install termux-api
